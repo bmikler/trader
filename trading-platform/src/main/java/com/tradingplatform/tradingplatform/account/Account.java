@@ -36,7 +36,13 @@ class Account {
             throw new RuntimeException("Not enough crypto");
         }
 
-        assets.put(currency, assets.get(currency).min(amountToSell));
+        BigDecimal amountToUpdate = assets.get(currency).min(amountToSell);
+        if (amountToUpdate.equals(BigDecimal.ZERO)) {
+            assets.remove(currency);
+        } else {
+            assets.put(currency, amountToUpdate);
+        }
+
         money = money.add(amountToSell.multiply(rate));
     }
 
