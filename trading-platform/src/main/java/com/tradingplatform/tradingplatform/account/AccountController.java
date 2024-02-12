@@ -1,5 +1,6 @@
 package com.tradingplatform.tradingplatform.account;
 
+import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

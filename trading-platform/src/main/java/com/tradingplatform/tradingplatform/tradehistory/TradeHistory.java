@@ -1,13 +1,12 @@
 package com.tradingplatform.tradingplatform.tradehistory;
 
 
-import com.tradingplatform.tradingplatform.account.CryptoCurrency;
+import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Currency;
 import java.util.List;
 import java.util.UUID;
 

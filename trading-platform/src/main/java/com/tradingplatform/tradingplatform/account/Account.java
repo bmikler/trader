@@ -1,16 +1,28 @@
 package com.tradingplatform.tradingplatform.account;
 
 
+import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.rate.Rate;
+import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 @RequiredArgsConstructor
+@Entity
 class Account {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private final UUID id;
     private final UUID userId;
+    @ElementCollection
+    @CollectionTable(name = "asset", joinColumns = @JoinColumn(name = "account_id"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @MapKeyColumn(name = "cryptocurrency")
+    @Column(name = "amount")
     private final Map<CryptoCurrency, BigDecimal> assets;
     private BigDecimal money = BigDecimal.valueOf(10000);
 
@@ -22,13 +34,13 @@ class Account {
         return money;
     }
 
-    BigDecimal calculateTotal(Map<CryptoCurrency, BigDecimal> rateTable) {
-        return assets.keySet().stream()
-                .map(currency -> assets.get(currency).multiply(rateTable.get(currency)))
+    BigDecimal calculateTotal(List<Rate> rateTable) {
+        return rateTable.stream()
+                .filter(rate -> assets.containsKey(rate.currency()))
+                .map(rate -> rate.value().multiply(assets.get(rate.currency())))
                 .reduce(money, BigDecimal::add);
     }
 
-    //Record history -> spring aspect
     void sell(CryptoCurrency currency, BigDecimal amountToSell, BigDecimal rate) {
         BigDecimal cryptoAmount = assets.getOrDefault(currency, BigDecimal.ZERO);
 

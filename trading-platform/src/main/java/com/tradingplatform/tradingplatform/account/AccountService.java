@@ -1,11 +1,14 @@
 package com.tradingplatform.tradingplatform.account;
 
+
+import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.rate.Rate;
+import com.tradingplatform.tradingplatform.rate.RateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -13,10 +16,10 @@ import java.util.UUID;
 class AccountService {
 
     private final AccountRepository accountRepository;
-    private final RateRepository rateRepository;
+    private final RateService rateService;
 
     AccountInfoDto getAccountInfo(UUID userId) {
-        Map<CryptoCurrency, BigDecimal> rateTable = rateRepository.getRateTable();
+        List<Rate> rateTable = rateService.getRateTable();
         Account account = getAccountByUserIdOrThrow(userId);
         return new AccountInfoDto(account.getMoney(), account.getAssets(), account.calculateTotal(rateTable));
     }
@@ -40,7 +43,7 @@ class AccountService {
     }
 
     private BigDecimal getRateOrThrow(CryptoCurrency currency) {
-        return rateRepository.getPrice(currency).orElseThrow(() -> new RuntimeException("Rate not found"));
+        return rateService.getPrice(currency).orElseThrow(() -> new RuntimeException("Rate not found"));
     }
 
 }
