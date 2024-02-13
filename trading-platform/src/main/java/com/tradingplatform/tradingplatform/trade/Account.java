@@ -38,6 +38,12 @@ class Account {
         return Collections.unmodifiableMap(assets);
     }
 
+    BigDecimal getTotal(Map<CryptoCurrency, BigDecimal> rates) {
+        return money.add(assets.entrySet().stream()
+                .map(entry -> entry.getValue().multiply(rates.get(entry.getKey())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
     void sell(CryptoCurrency currency, BigDecimal amountToSell, BigDecimal rate) {
         BigDecimal cryptoAmount = assets.getOrDefault(currency, BigDecimal.ZERO);
 

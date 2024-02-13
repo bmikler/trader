@@ -21,6 +21,14 @@ class AccountTest {
     }
 
     @Test
+    void getTotal_shouldReturnTotal() {
+        HashMap<CryptoCurrency, BigDecimal> rates = new HashMap<>();
+        rates.put(CryptoCurrency.BTC, BigDecimal.valueOf(10));
+        rates.put(CryptoCurrency.ETH, BigDecimal.valueOf(20));
+        assertThat(account.getTotal(rates)).isEqualByComparingTo(BigDecimal.valueOf(5069));
+    }
+
+    @Test
     void sell_noEnoughCrypto_shouldThrowException() {
         assertThatThrownBy(() -> account.sell(CryptoCurrency.BTC, new BigDecimal("1.6"), BigDecimal.TEN))
                 .isInstanceOf(RuntimeException.class)
