@@ -2,6 +2,7 @@ package com.tradingplatform.tradingplatform.trade;
 
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ class TradeService {
     private final AccountRepository accountRepository;
     private final TradeOfferRepository tradeOfferRepository;
     private final TradeOfferFactory tradeOfferFactory;
+
 
     TradeOffer createOffer(TradeOfferCommand command) {
         TradeOffer tradeOffer = tradeOfferFactory.createOffer(command.userId(), command.currency(), command.amount());

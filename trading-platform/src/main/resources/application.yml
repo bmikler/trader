@@ -11,3 +11,5 @@ spring:
 
 
 offer-expiration-minutes: 5
+
+starting-balance: 10000
