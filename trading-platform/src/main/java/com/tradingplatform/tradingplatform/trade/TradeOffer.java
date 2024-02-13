@@ -1,11 +1,10 @@
-package com.tradingplatform.tradingplatform.transaction;
+package com.tradingplatform.tradingplatform.trade;
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.CrudRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

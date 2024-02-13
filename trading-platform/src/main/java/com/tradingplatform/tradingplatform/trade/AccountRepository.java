@@ -1,4 +1,4 @@
-package com.tradingplatform.tradingplatform.transaction;
+package com.tradingplatform.tradingplatform.trade;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

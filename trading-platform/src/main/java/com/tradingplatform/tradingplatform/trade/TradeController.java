@@ -1,4 +1,4 @@
-package com.tradingplatform.tradingplatform.transaction;
+package com.tradingplatform.tradingplatform.trade;
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import lombok.RequiredArgsConstructor;
