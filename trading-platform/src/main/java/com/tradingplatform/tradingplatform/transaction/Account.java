@@ -1,11 +1,10 @@
-package com.tradingplatform.tradingplatform.account;
+package com.tradingplatform.tradingplatform.transaction;
 
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import com.tradingplatform.tradingplatform.rate.Rate;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -58,7 +57,6 @@ class Account {
         money = money.add(amountToSell.multiply(rate));
     }
 
-    //Record history -> spring aspect
     void buy(CryptoCurrency currency, BigDecimal amountToBuy, BigDecimal rate) {
         BigDecimal moneyNeeded = amountToBuy.multiply(rate);
         if (money.compareTo(moneyNeeded) < 0) {

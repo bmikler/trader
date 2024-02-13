@@ -17,7 +17,7 @@ public class RateService {
         return rateRepository.getAll();
     }
 
-    public Optional<BigDecimal> getPrice(CryptoCurrency currency) {
-        return rateRepository.getPrice(currency);
+    public BigDecimal getPrice(CryptoCurrency currency) {
+        return rateRepository.getPrice(currency).orElseThrow(() -> new RuntimeException("Rate not found"));
     }
 }

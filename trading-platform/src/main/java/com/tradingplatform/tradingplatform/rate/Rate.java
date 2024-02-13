@@ -1,6 +1,6 @@
 package com.tradingplatform.tradingplatform.rate;
 
-import jakarta.persistence.Entity;
+
 
 import java.math.BigDecimal;
 
