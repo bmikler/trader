@@ -26,7 +26,7 @@ class TradeService {
 
     void buy(TradeCommand command) {
         Account account = getAccountByUserIdOrThrow(command.userId());
-        TradeOffer tradeOffer = getTradeOfferOrThrow(command.tradeOfferId());
+        TradeOffer tradeOffer = getTradeOfferOrThrow(command.tradeOfferId(), command.userId());
         account.buy(tradeOffer.getCurrency(), tradeOffer.getAmount(), tradeOffer.getRate());
         accountRepository.save(account);
         tradeOfferRepository.delete(tradeOffer);
@@ -34,7 +34,7 @@ class TradeService {
 
     void sell(TradeCommand command) {
         Account account = getAccountByUserIdOrThrow(command.userId());
-        TradeOffer tradeOffer = getTradeOfferOrThrow(command.tradeOfferId());
+        TradeOffer tradeOffer = getTradeOfferOrThrow(command.tradeOfferId(), command.userId());
         account.sell(tradeOffer.getCurrency(), tradeOffer.getAmount(), tradeOffer.getRate());
         accountRepository.save(account);
         tradeOfferRepository.delete(tradeOffer);
@@ -44,11 +44,11 @@ class TradeService {
         return accountRepository.getAccountByUserId(userId).orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
-    private TradeOffer getTradeOfferOrThrow(UUID tradeOfferId) {
+    private TradeOffer getTradeOfferOrThrow(UUID tradeOfferId, UUID userId) {
         TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId).orElseThrow(() -> new RuntimeException("Trade offer not found"));
 
-        if (tradeOffer.isExpired()) {
-            throw new RuntimeException("Trade offer expired");
+        if (tradeOffer.isExpired() || !tradeOffer.isForUser(userId)) {
+            throw new RuntimeException("Invalid trade offer");
         }
 
         return tradeOffer;

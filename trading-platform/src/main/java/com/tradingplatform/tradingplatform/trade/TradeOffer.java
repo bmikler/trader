@@ -28,4 +28,8 @@ class TradeOffer {
     boolean isExpired() {
         return LocalDateTime.now().isAfter(expirationDate);
     }
+
+    boolean isForUser(UUID userId) {
+        return this.userId.equals(userId);
+    }
 }
