@@ -2,7 +2,6 @@ package com.tradingplatform.tradingplatform.trade;
 
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

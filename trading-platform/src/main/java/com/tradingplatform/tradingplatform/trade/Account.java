@@ -2,12 +2,8 @@ package com.tradingplatform.tradingplatform.trade;
 
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
-import com.tradingplatform.tradingplatform.rate.Rate;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 
 import java.math.BigDecimal;
@@ -48,7 +44,7 @@ class Account {
         BigDecimal cryptoAmount = assets.getOrDefault(currency, BigDecimal.ZERO);
 
         if (cryptoAmount.compareTo(amountToSell) < 0) {
-            throw new RuntimeException("Not enough crypto");
+            throw new IllegalArgumentException("Not enough crypto");
         }
 
         BigDecimal amountToUpdate = assets.get(currency).subtract(amountToSell);
@@ -60,7 +56,7 @@ class Account {
         BigDecimal moneyNeeded = amountToBuy.multiply(rate);
 
         if (money.compareTo(moneyNeeded) < 0) {
-            throw new RuntimeException("Not enough money to buy");
+            throw new IllegalArgumentException("Not enough money to buy");
         }
 
         money = money.subtract(moneyNeeded);

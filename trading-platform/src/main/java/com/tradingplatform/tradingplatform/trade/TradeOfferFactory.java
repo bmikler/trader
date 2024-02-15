@@ -2,7 +2,6 @@ package com.tradingplatform.tradingplatform.trade;
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import com.tradingplatform.tradingplatform.rate.RateService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

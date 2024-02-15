@@ -31,7 +31,7 @@ class AccountTest {
     @Test
     void sell_noEnoughCrypto_shouldThrowException() {
         assertThatThrownBy(() -> account.sell(CryptoCurrency.BTC, new BigDecimal("1.6"), BigDecimal.TEN))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Not enough crypto");
     }
     @Test
@@ -44,7 +44,7 @@ class AccountTest {
     @Test
     void buy_noEnoughMoney_shouldThrowException() {
         assertThatThrownBy(() -> account.buy(CryptoCurrency.ETH, new BigDecimal(5001L), BigDecimal.ONE))
-                .isInstanceOf(RuntimeException.class)
+                .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Not enough money to buy");
 
     }
