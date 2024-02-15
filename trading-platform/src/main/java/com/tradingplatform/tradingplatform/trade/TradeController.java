@@ -1,6 +1,8 @@
 package com.tradingplatform.tradingplatform.trade;
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,6 @@ class TradeController {
     }
 }
 
-record TradeRequest(CryptoCurrency currency, BigDecimal amount) {}
+record TradeRequest(CryptoCurrency currency, @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount) {}
 
 
