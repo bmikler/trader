@@ -16,7 +16,8 @@ class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User %s not found", username)));
+                .map(SecurityUser::new)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
     }
 
     RegisterResponse createUser(RegisterRequest registerRequest) {
