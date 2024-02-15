@@ -3,6 +3,7 @@ package com.tradingplatform.tradingplatform.trade;
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,14 +42,14 @@ class TradeService {
     }
 
     private Account getAccountByUserIdOrThrow(UUID userId) {
-        return accountRepository.getAccountByUserId(userId).orElseThrow(() -> new RuntimeException("Account not found"));
+        return accountRepository.getAccountByUserId(userId).orElseThrow(() -> new EntityNotFoundException("Account not found"));
     }
 
     private TradeOffer getTradeOfferOrThrow(UUID tradeOfferId, UUID userId) {
-        TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId).orElseThrow(() -> new RuntimeException("Trade offer not found"));
+        TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId).orElseThrow(() -> new EntityNotFoundException("Trade offer not found"));
 
         if (tradeOffer.isExpired() || !tradeOffer.isForUser(userId)) {
-            throw new RuntimeException("Invalid trade offer");
+            throw new IllegalArgumentException("Invalid trade offer");
         }
 
         return tradeOffer;

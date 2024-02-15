@@ -16,14 +16,14 @@ class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .orElseThrow(() -> new EntityNotFoundException("User {username} not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User %s not found", username)));
     }
 
     RegisterResponse createUser(RegisterRequest registerRequest) {
         AppUser appUser = new AppUser(registerRequest.email(), registerRequest.password());
         AppUser appUserSaved = userRepository.save(appUser);
 
-        //Create account
+        //TODO Create an account
 
         return new RegisterResponse(appUserSaved.getId(), appUserSaved.getEmail());
     }

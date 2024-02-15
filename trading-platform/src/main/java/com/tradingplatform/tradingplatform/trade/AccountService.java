@@ -3,6 +3,7 @@ package com.tradingplatform.tradingplatform.trade;
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import com.tradingplatform.tradingplatform.rate.Rate;
 import com.tradingplatform.tradingplatform.rate.RateService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ class AccountService {
     }
 
     AccountInfoDto getAccountInfo(UUID userId) {
-        Account account = accountRepository.getAccountByUserId(userId).orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository.getAccountByUserId(userId).orElseThrow(() -> new EntityNotFoundException("Account not found"));
         Map<CryptoCurrency, BigDecimal> rates = rateService.getRateTable().stream().collect(Collectors.toMap(Rate::currency, Rate::value));
         return new AccountInfoDto(userId, account.getMoney(), account.getAssets(), account.getTotal(rates));
     }
