@@ -1,6 +1,6 @@
 package com.tradingplatform.tradingplatform.user;
 
-import jakarta.persistence.EntityNotFoundException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +21,7 @@ class UserService implements UserDetailsService {
     }
 
     RegisterResponse createUser(RegisterRequest registerRequest) {
-        AppUser appUser = new AppUser(registerRequest.email(), registerRequest.password());
+        AppUser appUser = new AppUser(registerRequest.email(), registerRequest.password(), UserRole.REGULAR_USER);
         AppUser appUserSaved = userRepository.save(appUser);
 
         //TODO Create an account
