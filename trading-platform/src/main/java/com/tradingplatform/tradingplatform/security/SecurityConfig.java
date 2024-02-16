@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,12 +29,11 @@ class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers( "/h2-console").permitAll() //TODO remove it!
-                                .requestMatchers( "/api/user").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                                 .requestMatchers("/api/trade/**").hasRole("REGULAR_USER")
-                                .anyRequest().denyAll())
-                .httpBasic(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);
+                                .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(Customizer.withDefaults());
 
         return httpSecurity.build();
     }

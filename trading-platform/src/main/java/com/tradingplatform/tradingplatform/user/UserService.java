@@ -23,7 +23,7 @@ class UserService implements UserDetailsService {
     }
 
     RegisterResponse createUser(RegisterRequest registerRequest) {
-        AppUser appUser = new AppUser(registerRequest.email(), passwordEncoder.encode(registerRequest.password()), UserRole.REGULAR_USER);
+        AppUser appUser = new AppUser(registerRequest.email(), passwordEncoder.encode(registerRequest.password()), UserRole.ROLE_REGULAR_USER);
         AppUser appUserSaved = userRepository.save(appUser);
 
         //TODO Create an account
