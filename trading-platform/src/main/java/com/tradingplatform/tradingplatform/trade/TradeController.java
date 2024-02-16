@@ -1,20 +1,29 @@
 package com.tradingplatform.tradingplatform.trade;
 
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.user.SecurityUser;
 import jakarta.validation.constraints.DecimalMin;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api/trade")
 @RequiredArgsConstructor
 class TradeController {
 
     private final TradeService tradeService;
+
+    @GetMapping
+    String test(@AuthenticationPrincipal SecurityUser principal) {
+        System.err.println(principal.getId() + " " + principal.getUsername() + " " + principal.getAuthorities());
+        return "TradeController works";
+    }
 
     @PostMapping("/offer")
     ResponseEntity<TradeOffer> getOffer(@RequestParam UUID userId, @RequestBody TradeRequest tradeRequest) {

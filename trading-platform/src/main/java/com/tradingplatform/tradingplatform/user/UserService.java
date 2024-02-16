@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -21,7 +23,7 @@ class UserService implements UserDetailsService {
     }
 
     RegisterResponse createUser(RegisterRequest registerRequest) {
-        AppUser appUser = new AppUser(registerRequest.email(), registerRequest.password(), UserRole.REGULAR_USER);
+        AppUser appUser = new AppUser(registerRequest.email(), passwordEncoder.encode(registerRequest.password()), UserRole.REGULAR_USER);
         AppUser appUserSaved = userRepository.save(appUser);
 
         //TODO Create an account
