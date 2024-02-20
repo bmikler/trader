@@ -4,11 +4,13 @@ package com.tradingplatform.tradingplatform.trade;
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 class TradeService {
@@ -21,6 +23,7 @@ class TradeService {
     TradeOffer createOffer(TradeOfferCommand command) {
         TradeOffer tradeOffer = tradeOfferFactory.createOffer(command.userId(), command.currency(), command.amount());
         tradeOfferRepository.save(tradeOffer);
+        log.info("Trade offer for user with id {} has been created, {} {} for {} $", command.userId(), tradeOffer.getAmount(), tradeOffer.getCurrency(), tradeOffer.getRate());
         return tradeOffer;
     }
 
@@ -30,6 +33,7 @@ class TradeService {
         account.buy(tradeOffer.getCurrency(), tradeOffer.getAmount(), tradeOffer.getRate());
         accountRepository.save(account);
         tradeOfferRepository.delete(tradeOffer);
+        log.info("User with id {} has bought {} {} for {} $", command.userId(), tradeOffer.getAmount(), tradeOffer.getCurrency(), tradeOffer.getRate());
     }
 
     void sell(TradeCommand command) {
@@ -38,6 +42,7 @@ class TradeService {
         account.sell(tradeOffer.getCurrency(), tradeOffer.getAmount(), tradeOffer.getRate());
         accountRepository.save(account);
         tradeOfferRepository.delete(tradeOffer);
+        log.info("User with id {} has sold {} {} for {} $", command.userId(), tradeOffer.getAmount(), tradeOffer.getCurrency(), tradeOffer.getRate());
     }
 
     private Account getAccountByUserIdOrThrow(UUID userId) {
@@ -48,6 +53,7 @@ class TradeService {
         TradeOffer tradeOffer = tradeOfferRepository.findById(tradeOfferId).orElseThrow(() -> new EntityNotFoundException("Trade offer not found"));
 
         if (tradeOffer.isExpired() || !tradeOffer.isForUser(userId)) {
+            log.error("Invalid trade offer, user with id {} tried to access trade offer with id {}", userId, tradeOfferId);
             throw new IllegalArgumentException("Invalid trade offer");
         }
 
