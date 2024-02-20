@@ -1,19 +1,25 @@
 package com.tradingplatform.tradingplatform.user;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -22,12 +28,13 @@ class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
     }
 
+    @Transactional
     RegisterResponse createUser(RegisterRequest registerRequest) {
         AppUser appUser = new AppUser(registerRequest.email(), passwordEncoder.encode(registerRequest.password()), UserRole.ROLE_REGULAR_USER);
         AppUser appUserSaved = userRepository.save(appUser);
-
-        //TODO Create an account
-
+        log.info("User with email {} has been registered with id {}", appUserSaved.getEmail(), appUserSaved.getId());
+        eventPublisher.publishEvent(new RegisterUserEvent(this, appUserSaved.getId()));
         return new RegisterResponse(appUserSaved.getId(), appUserSaved.getEmail());
     }
 }
+

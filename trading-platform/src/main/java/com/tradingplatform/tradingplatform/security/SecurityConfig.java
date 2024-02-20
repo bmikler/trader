@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 class SecurityConfig {
 
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(5);
@@ -25,6 +24,7 @@ class SecurityConfig {
         httpSecurity.authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
                                 .requestMatchers("/api/trade/**").hasRole("REGULAR_USER")
                                 .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
@@ -32,5 +32,4 @@ class SecurityConfig {
 
         return httpSecurity.build();
     }
-
 }

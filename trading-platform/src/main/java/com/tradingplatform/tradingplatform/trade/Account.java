@@ -4,23 +4,25 @@ package com.tradingplatform.tradingplatform.trade;
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
+@NoArgsConstructor
 class Account {
 
     @Id
     private final UUID id = UUID.randomUUID();
-    private final UUID userId;
+    private UUID userId;
     @ElementCollection
     @CollectionTable(name = "asset", joinColumns = @JoinColumn(name = "account_id"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "cryptocurrency")
     @Column(name = "amount")
-    private final Map<CryptoCurrency, BigDecimal> assets;
+    private Map<CryptoCurrency, BigDecimal> assets;
     @Getter
     private BigDecimal money;
 

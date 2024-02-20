@@ -3,8 +3,11 @@ package com.tradingplatform.tradingplatform.trade;
 import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
 import com.tradingplatform.tradingplatform.rate.Rate;
 import com.tradingplatform.tradingplatform.rate.RateService;
+import com.tradingplatform.tradingplatform.user.RegisterUserEvent;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -12,6 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 class AccountService {
@@ -20,9 +24,11 @@ class AccountService {
     private final AccountFactory accountFactory;
     private final RateService rateService;
 
-    void createAccount(UUID userId) {
-        Account account = accountFactory.createAccount(userId);
+    @EventListener
+    public void createAccount(RegisterUserEvent event) {
+        Account account = accountFactory.createAccount(event.getUserId());
         accountRepository.save(account);
+        log.info("Account for user with id {} has been created", event.getUserId());
     }
 
     AccountInfoDto getAccountInfo(UUID userId) {

@@ -26,7 +26,6 @@ class UserController {
         RegisterResponse response = userService.createUser(registerRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 }
 
 record RegisterRequest(@Email String email, @NotBlank @Size(min = 6) String password) { }
