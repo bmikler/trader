@@ -1,6 +1,6 @@
 package com.tradingplatform.tradingplatform.trade;
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import com.tradingplatform.tradingplatform.user.SecurityUser;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +12,18 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/trade")
+@RequestMapping("/api/account")
 @RequiredArgsConstructor
-class TradeController {
+class AccountController {
 
     private final TradeService tradeService;
+    private final AccountService accountService;
+
+    @GetMapping
+    ResponseEntity<AccountInfoDto> getAccountInfo(@AuthenticationPrincipal SecurityUser user) {
+        return ResponseEntity.ok(accountService.getAccountInfo(user.getId()));
+    }
+
 
     @PostMapping("/offer")
     ResponseEntity<TradeOffer> getOffer(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {

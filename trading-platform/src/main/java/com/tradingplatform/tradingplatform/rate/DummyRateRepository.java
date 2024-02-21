@@ -1,5 +1,6 @@
 package com.tradingplatform.tradingplatform.rate;
 
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 

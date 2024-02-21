@@ -1,7 +1,7 @@
 package com.tradingplatform.tradingplatform.tradehistory;
 
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;

@@ -1,7 +1,7 @@
 package com.tradingplatform.tradingplatform.trade;
 
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

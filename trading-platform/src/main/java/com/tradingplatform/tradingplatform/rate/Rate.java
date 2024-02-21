@@ -2,6 +2,8 @@ package com.tradingplatform.tradingplatform.rate;
 
 
 
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
+
 import java.math.BigDecimal;
 
 

@@ -1,6 +1,6 @@
 package com.tradingplatform.tradingplatform.trade;
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

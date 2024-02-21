@@ -1,7 +1,7 @@
 package com.tradingplatform.tradingplatform.trade;
 
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

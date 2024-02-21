@@ -1,6 +1,6 @@
 package com.tradingplatform.tradingplatform.tradehistory;
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

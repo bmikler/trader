@@ -1,6 +1,6 @@
 package com.tradingplatform.tradingplatform.trade;
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import com.tradingplatform.tradingplatform.rate.Rate;
 import com.tradingplatform.tradingplatform.rate.RateService;
 import com.tradingplatform.tradingplatform.user.RegisterUserEvent;

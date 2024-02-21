@@ -1,6 +1,6 @@
 package com.tradingplatform.tradingplatform.trade;
 
-import com.tradingplatform.tradingplatform.rate.CryptoCurrency;
+import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import com.tradingplatform.tradingplatform.rate.RateService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
