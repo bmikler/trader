@@ -11,23 +11,25 @@ java {
 	sourceCompatibility = '21'
 }
 
+sourceSets {
+	integrationTest{
+		compileClasspath += main.output
+		runtimeClasspath += main.output
+		java.srcDir "$projectDir/src/integration-test/java"
+		resources.srcDir "$projectDir/src/integration-test/resources"
+	}
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	integrationTestImplementation.extendsFrom(testImplementation)
+	integrationTestRuntime.extendsFrom(testRuntime)
 }
 
 repositories {
 	mavenCentral()
-}
-
-sourceSets {
-	integrationTest{
-		compileClasspath += main.output + configurations["testRuntimeClasspath"]
-		runtimeClasspath += output + compileClasspath + test.runtimeClasspath
-		java.srcDir "$projectDir/src/integration-test/java"
-		resources.srcDir "$projectDir/src/integration-test/resources"
-	}
 }
 
 dependencies {
