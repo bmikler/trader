@@ -24,7 +24,6 @@ class AccountController {
         return ResponseEntity.ok(accountService.getAccountInfo(user.getId()));
     }
 
-
     @PostMapping("/offer")
     ResponseEntity<TradeOffer> getOffer(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {
         TradeOffer tradeOffer = tradeService.createOffer(new TradeOfferCommand(user.getId(), tradeRequest.currency(), tradeRequest.amount()));
