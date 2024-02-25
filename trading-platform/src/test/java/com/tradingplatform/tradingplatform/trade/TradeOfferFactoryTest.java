@@ -46,6 +46,6 @@ class TradeOfferFactoryTest {
         assertThat(offer.getCurrency()).isEqualTo(testCurrency);
         assertThat(offer.getRate()).isEqualTo(testRate);
         assertThat(offer.getAmount()).isEqualTo(testAmount);
-        assertThat(offer.getExpirationDate()).isEqualTo(LocalDateTime.ofInstant(ofEpochMilli(60000), ZoneId.systemDefault()));
+        assertThat(offer.getExpirationDate()).isEqualTo(LocalDateTime.ofInstant(ofEpochMilli(6000), ZoneId.systemDefault()));
     }
 }
