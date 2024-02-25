@@ -18,7 +18,6 @@ class TradeOfferFactory {
     private final Clock clock;
 
     TradeOfferFactory(@Value("${offer-expiration-minutes}") Long offerExpirationTimeMinutes , RateService rateService, Clock clock) {
-        System.err.println("TEST "+ offerExpirationTimeMinutes);
         this.rateService = rateService;
         this.offerExpirationTimeMinutes = offerExpirationTimeMinutes;
         this.clock = clock;
