@@ -21,5 +21,4 @@ public class IntegrationTest {
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper objectMapper;
-
 }

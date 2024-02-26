@@ -3,7 +3,7 @@ package com.tradingplatform.tradingplatform.trade;
 import com.tradingplatform.tradingplatform.IntegrationTest;
 import org.junit.jupiter.api.Test;
 
-class UserControllerTest extends IntegrationTest {
+class TradeControllerTest extends IntegrationTest {
 
     @Test
     void registerUserShouldCreateAccountForUser() {

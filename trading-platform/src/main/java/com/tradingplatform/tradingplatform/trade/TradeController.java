@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping("/api/trade")
 @RequiredArgsConstructor
-class AccountController {
+class TradeController {
 
     private final TradeService tradeService;
     private final AccountService accountService;
@@ -24,7 +24,7 @@ class AccountController {
         return ResponseEntity.ok(accountService.getAccountInfo(user.getId()));
     }
 
-    @PostMapping("/offer")
+    @PostMapping
     ResponseEntity<TradeOffer> getOffer(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {
         TradeOffer tradeOffer = tradeService.createOffer(new TradeOfferCommand(user.getId(), tradeRequest.currency(), tradeRequest.amount()));
         return ResponseEntity.ok(tradeOffer);

@@ -11,11 +11,14 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Entity
+@Table(name = "account")
 @NoArgsConstructor
 class Account {
 
     @Id
+    @Column(name = "id")
     private final UUID id = UUID.randomUUID();
+    @Column(name = "user_id")
     private UUID userId;
     @ElementCollection
     @CollectionTable(name = "asset", joinColumns = @JoinColumn(name = "account_id"))
@@ -24,6 +27,7 @@ class Account {
     @Column(name = "amount")
     private Map<CryptoCurrency, BigDecimal> assets;
     @Getter
+    @Column(name = "money")
     private BigDecimal money;
 
     Account(UUID userId, BigDecimal money, Map<CryptoCurrency, BigDecimal> assets) {
