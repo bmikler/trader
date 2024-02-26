@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.2.3"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("org.unbroken-dome.test-sets") version "4.1.0"
 }
 
 group = "com.trading-platform"
@@ -15,18 +16,14 @@ repositories {
 	mavenCentral()
 }
 
-val integrationTest = sourceSets.create("test-integration") {
-	java {
-		compileClasspath += sourceSets.main.get().output + sourceSets.test.get().output
-		runtimeClasspath += sourceSets.main.get().output + sourceSets.test.get().output
-		srcDir("src/test-integration/java")
-	}
-	resources.srcDir("src/test-integration/resources")
+
+val integrationTest = testSets.create("integrationTest") {
+	dirName = "test-integration"
 }
 
-configurations[integrationTest.implementationConfigurationName].extendsFrom(configurations.testImplementation.get())
-configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configurations.testRuntimeOnly.get())
-
+tasks.withType(Test::class.java) {
+	useJUnitPlatform()
+}
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
