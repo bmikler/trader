@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,11 +31,13 @@ class TradeHistoryService {
     }
 
     List<HistoryDto> getTradeHistory(HistoryQuery historyQuery) {
-        return tradeHistoryRepository.findByUserIdAndTimestampBetween(historyQuery.userId(), historyQuery.start(), historyQuery.end()).stream()
+        LocalDateTime startDate = LocalDateTime.of(historyQuery.start(), LocalTime.MIN);
+        LocalDateTime endDate = LocalDateTime.of(historyQuery.end(), LocalTime.MAX);
+        return tradeHistoryRepository.findByUserIdAndTimestampBetween(historyQuery.userId(), startDate, endDate).stream()
                 .map(record -> new HistoryDto(record.getTimestamp(), record.getAmount(), record.getRate(), record.getCurrency()))
                 .toList();
     }
 }
 
-record HistoryQuery(UUID userId, LocalDateTime start, LocalDateTime end) {}
+record HistoryQuery(UUID userId, LocalDate start, LocalDate end) {}
 

@@ -10,9 +10,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,8 +27,8 @@ class TradeHistoryController {
     private final TradeHistoryService tradeHistoryService;
 
     @GetMapping
-    ResponseEntity<List<HistoryDto>> getTradeHistory(@AuthenticationPrincipal SecurityUser user, @RequestBody HistoryRequest historyRequest) {
-        List<HistoryDto> history = tradeHistoryService.getTradeHistory(new HistoryQuery(user.getId(), historyRequest.start(), historyRequest.end()));
+    ResponseEntity<List<HistoryDto>> getTradeHistory(@AuthenticationPrincipal SecurityUser user, @RequestParam LocalDate start, @RequestParam LocalDate end) {
+        List<HistoryDto> history = tradeHistoryService.getTradeHistory(new HistoryQuery(user.getId(), start, end));
         return ResponseEntity.ok().body(history);
     }
 }

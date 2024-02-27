@@ -3,7 +3,9 @@ package com.tradingplatform.tradingplatform.trade;
 import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -12,16 +14,17 @@ import java.util.UUID;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 class TradeOffer {
 
     @Id
     private final UUID id = UUID.randomUUID();
-    private final UUID userId;
-    private final CryptoCurrency currency;
-    private final BigDecimal rate;
-    private final BigDecimal amount;
-    private final LocalDateTime expirationDate;
+    private UUID userId;
+    private CryptoCurrency currency;
+    private BigDecimal rate;
+    private BigDecimal amount;
+    private LocalDateTime expirationDate;
 
     boolean isExpired() {
         return LocalDateTime.now().isAfter(expirationDate);

@@ -4,6 +4,7 @@ import com.tradingplatform.tradingplatform.shared.CryptoCurrency;
 import com.tradingplatform.tradingplatform.user.SecurityUser;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,22 +26,23 @@ class TradeController {
     }
 
     @PostMapping
-    ResponseEntity<TradeOffer> createOffer(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {
-        TradeOffer tradeOffer = tradeService.createOffer(new TradeOfferCommand(user.getId(), tradeRequest.currency(), tradeRequest.amount()));
-        return ResponseEntity.ok(tradeOffer);
+    ResponseEntity<TradeOffer> createOffer(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeOfferRequest tradeOfferRequest) {
+        TradeOffer tradeOffer = tradeService.createOffer(new TradeOfferCommand(user.getId(), tradeOfferRequest.currency(), tradeOfferRequest.amount()));
+        return new ResponseEntity<>(tradeOffer, HttpStatus.CREATED);
     }
 
     @PostMapping("/buy")
-    void buy(@AuthenticationPrincipal SecurityUser user, @RequestBody UUID tradeOfferId) {
-        tradeService.buy(new TradeCommand(user.getId(), tradeOfferId));
+    void buy(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {
+        tradeService.buy(new TradeCommand(user.getId(), tradeRequest.tradeOfferId()));
     }
 
     @PostMapping("/sell")
-    void sell(@AuthenticationPrincipal SecurityUser user, @RequestBody UUID tradeOfferId) {
-        tradeService.sell(new TradeCommand(user.getId(), tradeOfferId));
+    void sell(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {
+        tradeService.sell(new TradeCommand(user.getId(), tradeRequest.tradeOfferId()));
     }
 }
 
-record TradeRequest(CryptoCurrency currency, @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount) {}
+record TradeOfferRequest(CryptoCurrency currency, @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount) {}
+record TradeRequest(UUID tradeOfferId) {}
 
 

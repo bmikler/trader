@@ -34,8 +34,8 @@ class AccountService {
     AccountInfoDto getAccountInfo(UUID userId) {
         Account account = accountRepository.getAccountByUserId(userId).orElseThrow(() -> new EntityNotFoundException("Account not found"));
         Map<CryptoCurrency, BigDecimal> rates = rateService.getRateTable().stream().collect(Collectors.toMap(Rate::currency, Rate::value));
-        return new AccountInfoDto(userId, account.getMoney(), account.getAssets(), account.getTotal(rates));
+        return new AccountInfoDto(account.getMoney(), account.getAssets(), account.getTotal(rates));
     }
 }
 
-record AccountInfoDto(UUID userId, BigDecimal balance, Map<CryptoCurrency, BigDecimal> assets, BigDecimal total) {};
+record AccountInfoDto(BigDecimal balance, Map<CryptoCurrency, BigDecimal> assets, BigDecimal total) {};
