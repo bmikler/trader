@@ -6,12 +6,15 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
-class CoinApiWebClientConfig(@Value("\${coin-api-key}") private val apiKey: String) {
+class CoinApiWebClientConfig(
+    @Value("\${coin-api-key}") private val apiKey: String,
+    @Value("\${coin-api-url}") private val baseUrl: String
+) {
 
     @Bean
     fun webClient() : WebClient {
         return WebClient.builder()
-            .baseUrl("https://rest.coinapi.io/v1/exchangerate/USD?filter_asset_id=BTC,ETH")
+            .baseUrl(baseUrl)
             .defaultHeader("X-CoinAPI-Key", apiKey)
             .build()
     }
