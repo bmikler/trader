@@ -34,6 +34,7 @@ dependencies {
 	implementation("com.h2database:h2") //TODO remove it after change to other DB
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
