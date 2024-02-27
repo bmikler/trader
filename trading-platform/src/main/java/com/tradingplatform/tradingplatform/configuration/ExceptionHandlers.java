@@ -1,6 +1,7 @@
 package com.tradingplatform.tradingplatform.configuration;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,6 +20,14 @@ class ExceptionHandlers extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     ResponseEntity<GlobalError> handleEntityNotFoundException(EntityNotFoundException ex) {
         return new ResponseEntity<>(new GlobalError(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(JdbcSQLIntegrityConstraintViolationException.class)
+    ResponseEntity<GlobalError> handleEntityNotFoundException(JdbcSQLIntegrityConstraintViolationException ex) throws JdbcSQLIntegrityConstraintViolationException {
+        if (ex.getErrorCode() == 23505) {
+            return new ResponseEntity<>(new GlobalError("Unique constraint violation"), HttpStatus.CONFLICT);
+        }
+        throw ex;
     }
 
     @Override

@@ -20,7 +20,7 @@ class UserControllerTest extends IntegrationTest {
     @Transactional
     void registerUserShouldCreateNewUser() throws Exception {
         int sizeBefore = userRepository.findAll().size();
-        RegisterRequest request = new RegisterRequest("test@email.com", "password123");
+        RegisterRequest request = new RegisterRequest("new-user@email.com", "password123");
         String requestJson = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(post("/api/user")
@@ -28,7 +28,7 @@ class UserControllerTest extends IntegrationTest {
                         .content(requestJson))
                 .andExpect(status().is(201))
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.email").value("test@email.com"));
+                .andExpect(jsonPath("$.email").value("new-user@email.com"));
 
         assertThat(userRepository.findAll().size()).isEqualTo(sizeBefore + 1);
     }
