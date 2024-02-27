@@ -27,6 +27,7 @@ class TradeControllerTest extends IntegrationTest {
     private AccountRepository accountRepository;
 
     @Test
+    @Transactional
     void registerUserShouldCreateAccountForUser() throws Exception {
         int sizeBefore = accountRepository.findAll().size();
 
