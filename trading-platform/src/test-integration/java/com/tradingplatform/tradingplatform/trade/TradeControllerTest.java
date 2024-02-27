@@ -55,14 +55,14 @@ class TradeControllerTest extends IntegrationTest {
 
     @Test
     @WithUserDetails(value = "test-user@test.com", userDetailsServiceBeanName = "userService")
-    void buyShouldChangeAccountBalance() {
+    void buyShouldChangeAccountBalanceAndRecordHistory() {
 
 
     }
 
     @Test
     @WithUserDetails(value = "test-user@test.com", userDetailsServiceBeanName = "userService")
-    void sellShouldChangeAccountBalance() {
+    void sellShouldChangeAccountBalanceAndRecordHistory() {
 
     }
 
