@@ -25,7 +25,7 @@ class TradeHistoryRecord {
     @Getter
     private CryptoCurrency currency;
 
-    public TradeHistoryRecord(LocalDateTime timestamp, UUID userId, BigDecimal amount, BigDecimal rate, CryptoCurrency currency) {
+    TradeHistoryRecord(LocalDateTime timestamp, UUID userId, BigDecimal amount, BigDecimal rate, CryptoCurrency currency) {
         this.timestamp = timestamp;
         this.userId = userId;
         this.amount = amount;
