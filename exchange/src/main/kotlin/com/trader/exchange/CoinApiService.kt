@@ -16,6 +16,7 @@ class CoinApiService(
             .uri("$baseCurrency?filter_asset_id=${cryptoCurrencies.joinToString(separator = ",")}")
             .retrieve()
             .bodyToMono(RatesResponse::class.java)
+            .map { createSnapshot(it.rates) }
             .subscribe { println(it) }
     }
 

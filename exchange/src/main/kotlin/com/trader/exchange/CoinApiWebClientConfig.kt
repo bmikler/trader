@@ -10,7 +10,6 @@ class CoinApiWebClientConfig(
     @Value("\${coin-api-key}") private val apiKey: String,
     @Value("\${coin-api-url}") private val baseUrl: String
 ) {
-
     @Bean
     fun webClient() : WebClient {
         return WebClient.builder()
