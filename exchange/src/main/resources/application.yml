@@ -3,3 +3,11 @@ coin-api-url: https://rest.coinapi.io/v1/exchangerate/
 
 base-currency: USD
 crypto-currencies: BTC,ETH
+  
+  
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: rate-mongo
