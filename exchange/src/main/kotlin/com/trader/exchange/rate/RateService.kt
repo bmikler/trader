@@ -21,10 +21,10 @@ class RateService(
 
     @Scheduled(fixedDelay = 360000, initialDelay = 10000)
     private final fun updateRates() {
-        getRatesFromCoinApi()?.let  {
+        getRatesFromCoinApi()?.let {
             val ratesSnapshot = RatesSnapshot(it.rates)
             rateSnapshotRepository.save(ratesSnapshot)
-            logger.info { "Rates saved"}
+            logger.info { "Rates saved" }
         }
     }
 
@@ -37,12 +37,8 @@ class RateService(
             .uri(url)
             .retrieve()
             .bodyToMono(CoinApiResponse::class.java)
-            .doOnSuccess {
-                logger.info { "Rates downloaded: $it" }
-            }
-            .doOnError {
-                logger.error { "Error during rates download: $it" }
-            }
+            .doOnSuccess { logger.info { "Rates downloaded: $it" } }
+            .doOnError { logger.error { "Error during rates download: $it" } }
             .block()
     }
 
@@ -50,6 +46,7 @@ class RateService(
         return rateSnapshotRepository.findFirstByOrderByTimestampDesc() ?: throw RuntimeException("Entity not found")
     }
 }
-interface RateSnapshotRepository: MongoRepository<RatesSnapshot, LocalDateTime> {
+
+interface RateSnapshotRepository : MongoRepository<RatesSnapshot, LocalDateTime> {
     fun findFirstByOrderByTimestampDesc(): RatesSnapshot?
 }
