@@ -21,25 +21,29 @@ class RateService(
 
     @Scheduled(fixedDelay = 360000, initialDelay = 10000)
     private final fun updateRates() {
+        getRatesFromCoinApi()?.let  {
+            val ratesSnapshot = RatesSnapshot(it.rates)
+            rateSnapshotRepository.save(ratesSnapshot)
+            logger.info { "Rates saved"}
+        }
+    }
+
+    private fun getRatesFromCoinApi(): CoinApiResponse? {
         val url = "$baseCurrency?filter_asset_id=${cryptoCurrencies.joinToString(separator = ",")}"
 
         logger.info { "Updating rates. URL: $url" }
 
-        webClient.get()
+        return webClient.get()
             .uri(url)
             .retrieve()
             .bodyToMono(CoinApiResponse::class.java)
             .doOnSuccess {
                 logger.info { "Rates downloaded: $it" }
-                val ratesSnapshot = RatesSnapshot(it.rates)
-                rateSnapshotRepository.save(ratesSnapshot)
-                logger.info { "Rates saved: $ratesSnapshot" }
             }
             .doOnError {
                 logger.error { "Error during rates download: $it" }
             }
-            .onErrorComplete()
-            .subscribe ()
+            .block()
     }
 
     fun getLastRates(): RatesSnapshot {
