@@ -29,11 +29,17 @@ class RateService(
             .uri(url)
             .retrieve()
             .bodyToMono(CoinApiResponse::class.java)
-            .map { RatesSnapshot(it.rates) }
-            .subscribe {
+            .doOnSuccess {
                 logger.info { "Rates downloaded: $it" }
-                rateSnapshotRepository.save(it)
+                val ratesSnapshot = RatesSnapshot(it.rates)
+                rateSnapshotRepository.save(ratesSnapshot)
+                logger.info { "Rates saved: $ratesSnapshot" }
             }
+            .doOnError {
+                logger.error { "Error during rates download: $it" }
+            }
+            .onErrorComplete()
+            .subscribe ()
     }
 
     fun getLastRates(): RatesSnapshot {
