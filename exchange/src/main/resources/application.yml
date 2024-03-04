@@ -3,7 +3,9 @@ coin-api-url: https://rest.coinapi.io/v1/exchangerate/
 
 base-currency: USD
 crypto-currencies: BTC,ETH
-  
+
+server:
+  port: 8081
   
 spring:
   data:

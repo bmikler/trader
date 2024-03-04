@@ -28,11 +28,13 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	implementation("org.springframework.kafka:spring-kafka")
 	implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

@@ -1,8 +1,10 @@
 package com.trader.exchange.rate
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -14,25 +16,29 @@ class RateService(
     @Value("\${base-currency}") private val baseCurrency: String,
     @Value("\${crypto-currencies}") private val cryptoCurrencies: List<String>,
     private val rateSnapshotRepository: RateSnapshotRepository,
+    private val kafkaTemplate: KafkaTemplate<String, RatesSnapshot>,
+    private val mapper: ObjectMapper,
     private val webClient: WebClient
 ) {
 
     private val logger = KotlinLogging.logger {}
 
-    @Scheduled(fixedDelay = 360000, initialDelay = 10000)
+//    @Scheduled(fixedDelay = 360000, initialDelay = 10000)
+    @Scheduled(fixedDelay = 2000)
     private final fun updateRates() {
         getRatesFromCoinApi()?.let {
             val ratesSnapshot = RatesSnapshot(it.rates)
             rateSnapshotRepository.save(ratesSnapshot)
             logger.info { "Rates saved" }
+
+            mapper.writeValue(ratesSnapshot)
+            kafkaTemplate.send("rate-update", ratesSnapshot)
         }
     }
 
     private fun getRatesFromCoinApi(): CoinApiResponse? {
         val url = "$baseCurrency?filter_asset_id=${cryptoCurrencies.joinToString(separator = ",")}"
-
         logger.info { "Updating rates. URL: $url" }
-
         return webClient.get()
             .uri(url)
             .retrieve()
