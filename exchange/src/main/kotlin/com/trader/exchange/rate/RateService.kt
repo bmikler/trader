@@ -22,7 +22,7 @@ class RateService(
 
     private val logger = KotlinLogging.logger {}
 
-    @Scheduled(fixedDelay = 360000, initialDelay = 10000)
+    @Scheduled(fixedDelay = 360000, initialDelay = 5000)
     private final fun updateRates() {
         getRatesFromCoinApi()?.let {
             val savedSnapshot = rateSnapshotRepository.save(RatesSnapshot(it.rates))
