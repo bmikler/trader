@@ -13,3 +13,5 @@ spring:
       host: localhost
       port: 27017
       database: rate-mongo
+  kafka:
+    bootstrap-servers: localhost:9092
