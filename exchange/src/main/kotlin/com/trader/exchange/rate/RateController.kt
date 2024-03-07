@@ -11,6 +11,7 @@ class RateController(private val rateService: RateService) {
 
     @GetMapping
     fun getLatestRates() : ResponseEntity<RatesSnapshot> {
+        System.err.println("test")
         return ResponseEntity.ok(rateService.getLastRates())
     }
 

@@ -19,6 +19,7 @@ extra["springCloudVersion"] = "2023.0.0"
 
 dependencies {
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
