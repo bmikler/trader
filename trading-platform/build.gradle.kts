@@ -16,6 +16,7 @@ repositories {
 	mavenCentral()
 }
 
+extra["springCloudVersion"] = "2023.0.0"
 
 val integrationTest = testSets.create("integrationTest") {
 	dirName = "test-integration"
@@ -31,6 +32,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
 	implementation("com.h2database:h2") //TODO remove it after change to other DB
 	compileOnly("org.projectlombok:lombok")
@@ -40,3 +42,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+	}
+}

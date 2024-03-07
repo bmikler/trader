@@ -8,6 +8,8 @@ server:
   port: 8081
   
 spring:
+  application:
+    name: exchange
   data:
     mongodb:
       host: localhost

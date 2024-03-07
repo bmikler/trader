@@ -31,6 +31,10 @@ class TradeService {
         return tradeOffer;
     }
 
+    void removeOutdatedOffers() {
+        //TODO
+    }
+
     @Transactional
     void buy(TradeCommand command) {
         Account account = getAccountByUserIdOrThrow(command.userId());
