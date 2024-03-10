@@ -1,6 +1,6 @@
 package com.trader.exchange.rate
 
-import com.fasterxml.jackson.databind.ObjectMapper
+
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.repository.MongoRepository
@@ -17,22 +17,17 @@ class RateService(
     @Value("\${crypto-currencies}") private val cryptoCurrencies: List<String>,
     private val rateSnapshotRepository: RateSnapshotRepository,
     private val kafkaTemplate: KafkaTemplate<String, RatesSnapshot>,
-    private val mapper: ObjectMapper,
     private val webClient: WebClient
 ) {
 
     private val logger = KotlinLogging.logger {}
 
-//    @Scheduled(fixedDelay = 360000, initialDelay = 10000)
-    @Scheduled(fixedDelay = 2000)
+//    @Scheduled(fixedDelay = 360000, initialDelay = 5000)
     private final fun updateRates() {
         getRatesFromCoinApi()?.let {
-            val ratesSnapshot = RatesSnapshot(it.rates)
-            rateSnapshotRepository.save(ratesSnapshot)
+            val savedSnapshot = rateSnapshotRepository.save(RatesSnapshot(it.rates))
             logger.info { "Rates saved" }
-
-            mapper.writeValue(ratesSnapshot)
-            kafkaTemplate.send("rate-update", ratesSnapshot)
+            kafkaTemplate.send("rate-update", savedSnapshot)
         }
     }
 

@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -21,6 +22,11 @@ class DummyRateRepository implements RateRepository{
     }
 
     @Override
+    public void updateRates(List<Rate> rates) {
+        rates.forEach(rate -> this.rates.put(rate.currency(), rate.value()));
+    }
+
+    @Override
     public Optional<BigDecimal> getPrice(CryptoCurrency currency) {
         return Optional.ofNullable(rates.get(currency));
     }
@@ -28,7 +34,7 @@ class DummyRateRepository implements RateRepository{
     @Override
     public List<Rate> getAll() {
         return rates.keySet().stream()
-                .map(currency -> new Rate(currency, rates.get(currency)))
+                .map(currency -> new Rate(currency, rates.get(currency), LocalDateTime.now()))
                 .toList();
     }
 }

@@ -8,8 +8,12 @@ server:
   port: 8081
   
 spring:
+  application:
+    name: exchange
   data:
     mongodb:
       host: localhost
       port: 27017
       database: rate-mongo
+  kafka:
+    bootstrap-servers: localhost:9092

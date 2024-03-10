@@ -1,0 +1,16 @@
+name: "crypto-trader"
+
+services:
+  rate-mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INIT_DATABASE: rate-mongo
+    ports:
+      - 27017:27017
+
+  rate-kafka:
+    image: apache/kafka:latest
+    restart: always
+    ports:
+      - 9092:9092
