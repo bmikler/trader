@@ -53,7 +53,8 @@ class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.withUsername("user").password("password").authorities("read").build();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5);
+        UserDetails userDetails = User.withUsername("user").password(encoder.encode("password")).authorities("read").build();
         return new InMemoryUserDetailsManager(userDetails);
     }
 
