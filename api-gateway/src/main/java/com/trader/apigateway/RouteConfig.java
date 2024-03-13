@@ -10,12 +10,12 @@ class RouteConfig {
     @Bean
     RouteLocator myRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("exchange-service", r -> r.path("/exchange/**")
+                .route("rate-service", r -> r.path("/rate/**")
                         .filters(f -> f.stripPrefix(1).tokenRelay())
-                        .uri("lb://EXCHANGE"))
+                        .uri("lb://RATE-SERVICE"))
                 .route("trade-service", r -> r.path("/trade/**")
                         .filters(f -> f.stripPrefix(1).tokenRelay())
-                        .uri("lb://TRADING-PLATFORM"))
+                        .uri("lb://TRADE-SERVICE"))
                 .build();
     }
 }

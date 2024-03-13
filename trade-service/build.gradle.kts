@@ -5,7 +5,7 @@ plugins {
 	id("org.unbroken-dome.test-sets") version "4.1.0"
 }
 
-group = "com.trading-platform"
+group = "com.trade-service"
 version = "0.0.1-SNAPSHOT"
 
 java {
