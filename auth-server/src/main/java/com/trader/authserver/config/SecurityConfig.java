@@ -64,7 +64,7 @@ class SecurityConfig {
     @Bean
     UserDetailsService userDetailsService() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5);
-        UserDetails userDetails = User.withUsername("user").password(encoder.encode("password")).authorities("read").build();
+        UserDetails userDetails = User.withUsername("user").password(encoder.encode("password")).roles("REGULAR_USER").build();
         return new InMemoryUserDetailsManager(userDetails);
     }
 
@@ -77,11 +77,11 @@ class SecurityConfig {
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient registeredClient = RegisteredClient
                 .withId(UUID.randomUUID().toString())
-                .clientId("client")
+                .clientId("api-gateway")
                 .clientSecret("secret")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PHONE)
-                .redirectUri("http://springone.io/authorized")
+                .redirectUri("http://127.0.0.1:8070/login/oauth2/code/messaging-gateway-oidc")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)

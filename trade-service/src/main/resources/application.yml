@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: trading-platform
+    name: trade-service
   h2:
     console.enabled: true
   datasource:
