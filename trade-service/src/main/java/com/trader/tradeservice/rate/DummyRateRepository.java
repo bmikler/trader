@@ -2,12 +2,14 @@ package com.trader.tradeservice.rate;
 
 import com.trader.tradeservice.shared.CryptoCurrency;
 import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Primary
 @Component
 class DummyRateRepository implements RateRepository{
 

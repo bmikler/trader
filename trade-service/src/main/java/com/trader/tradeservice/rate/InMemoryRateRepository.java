@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Primary
+//@Primary
 @Component
 class InMemoryRateRepository implements RateRepository{
 

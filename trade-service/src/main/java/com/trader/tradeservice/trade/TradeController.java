@@ -20,6 +20,11 @@ class TradeController {
     private final TradeService tradeService;
     private final AccountService accountService;
 
+    @GetMapping("/test")
+    ResponseEntity<?> test(@AuthenticationPrincipal SecurityUser user) {
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping
     ResponseEntity<AccountInfoDto> getAccountInfo(@AuthenticationPrincipal SecurityUser user) {
         return ResponseEntity.ok(accountService.getAccountInfo(user.getId()));

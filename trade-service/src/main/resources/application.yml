@@ -14,7 +14,9 @@ spring:
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 
+jwks-uri: http://localhost:8080/oauth2/jwks
 
 offer-expiration-minutes: 5
 
 starting-balance: 10000
+

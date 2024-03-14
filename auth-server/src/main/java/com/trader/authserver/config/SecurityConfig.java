@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -56,35 +57,36 @@ class SecurityConfig {
     @Order(2)
     SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(httpRequest -> httpRequest.anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
+                .authorizeHttpRequests(httpRequest -> httpRequest.anyRequest().authenticated())
                 .build();
     }
 
     @Bean
     UserDetailsService userDetailsService() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5);
-        UserDetails userDetails = User.withUsername("user").password(encoder.encode("password")).roles("REGULAR_USER").build();
+        UserDetails userDetails = User.withUsername("user").password("password").authorities("read").build();
         return new InMemoryUserDetailsManager(userDetails);
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(5);
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
     RegisteredClientRepository registeredClientRepository() {
         RegisteredClient registeredClient = RegisteredClient
                 .withId(UUID.randomUUID().toString())
-                .clientId("api-gateway")
+                .clientId("client")
                 .clientSecret("secret")
-                .scope(OidcScopes.OPENID)
-                .scope(OidcScopes.PHONE)
-                .redirectUri("http://127.0.0.1:8070/login/oauth2/code/messaging-gateway-oidc")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .scope(OidcScopes.OPENID)
+                .scope(OidcScopes.PROFILE)
+                .redirectUri("https://springone.io/authorized")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .build();
 
         return new InMemoryRegisteredClientRepository(registeredClient);
