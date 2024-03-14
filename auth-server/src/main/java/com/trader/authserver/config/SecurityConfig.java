@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +27,9 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
@@ -34,6 +38,9 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Configuration
@@ -65,7 +72,7 @@ class SecurityConfig {
     @Bean
     UserDetailsService userDetailsService() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5);
-        UserDetails userDetails = User.withUsername("user").password("password").authorities("read").build();
+        UserDetails userDetails = User.withUsername("user").password("password").authorities("ROLE_REGULAR_USER").build();
         return new InMemoryUserDetailsManager(userDetails);
     }
 
@@ -83,6 +90,7 @@ class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
+                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofDays(10)).build())
                 .redirectUri("https://springone.io/authorized")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
@@ -115,14 +123,18 @@ class SecurityConfig {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);
             return keyPairGenerator.generateKeyPair();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new IllegalStateException(ex);
         }
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-        return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
+    OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer() {
+        return context -> {
+            List<String> authorities = context.getPrincipal().getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+            context.getClaims().claim("authorities", authorities);
+        };
     }
 }

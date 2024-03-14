@@ -6,10 +6,12 @@ import jakarta.validation.constraints.DecimalMin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.UUID;
 
 @RestController
@@ -21,8 +23,9 @@ class TradeController {
     private final AccountService accountService;
 
     @GetMapping("/test")
-    ResponseEntity<?> test(@AuthenticationPrincipal SecurityUser user) {
-        return ResponseEntity.ok(user);
+    ResponseEntity<?> test(Authentication authentication) {
+        System.err.println(authentication.getAuthorities());
+        return ResponseEntity.ok(authentication);
     }
 
     @GetMapping
