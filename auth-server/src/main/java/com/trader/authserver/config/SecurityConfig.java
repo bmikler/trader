@@ -90,7 +90,7 @@ class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
-                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofDays(10)).build())
+                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofDays(10)).build()) //TODO remove it!
                 .redirectUri("https://springone.io/authorized")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
