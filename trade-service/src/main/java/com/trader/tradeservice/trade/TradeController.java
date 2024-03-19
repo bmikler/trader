@@ -2,14 +2,10 @@ package com.trader.tradeservice.trade;
 
 import com.trader.tradeservice.security.CustomJwtAuthenticationToken;
 import com.trader.tradeservice.shared.CryptoCurrency;
-import com.trader.tradeservice.user.SecurityUser;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -33,24 +29,24 @@ class TradeController {
     }
 
     @GetMapping
-    ResponseEntity<AccountInfoDto> getAccountInfo(@AuthenticationPrincipal SecurityUser user) {
-        return ResponseEntity.ok(accountService.getAccountInfo(user.getId()));
+    ResponseEntity<AccountInfoDto> getAccountInfo(CustomJwtAuthenticationToken auth) {
+        return ResponseEntity.ok(accountService.getAccountInfo(auth.getUserId()));
     }
 
     @PostMapping
-    ResponseEntity<TradeOffer> createOffer(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeOfferRequest tradeOfferRequest) {
-        TradeOffer tradeOffer = tradeService.createOffer(new TradeOfferCommand(user.getId(), tradeOfferRequest.currency(), tradeOfferRequest.amount()));
+    ResponseEntity<TradeOffer> createOffer(CustomJwtAuthenticationToken auth, @RequestBody TradeOfferRequest tradeOfferRequest) {
+        TradeOffer tradeOffer = tradeService.createOffer(new TradeOfferCommand(auth.getUserId(), tradeOfferRequest.currency(), tradeOfferRequest.amount()));
         return new ResponseEntity<>(tradeOffer, HttpStatus.CREATED);
     }
 
     @PostMapping("/buy")
-    void buy(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {
-        tradeService.buy(new TradeCommand(user.getId(), tradeRequest.tradeOfferId()));
+    void buy(CustomJwtAuthenticationToken auth, @RequestBody TradeRequest tradeRequest) {
+        tradeService.buy(new TradeCommand(auth.getUserId(), tradeRequest.tradeOfferId()));
     }
 
     @PostMapping("/sell")
-    void sell(@AuthenticationPrincipal SecurityUser user, @RequestBody TradeRequest tradeRequest) {
-        tradeService.sell(new TradeCommand(user.getId(), tradeRequest.tradeOfferId()));
+    void sell(CustomJwtAuthenticationToken auth, @RequestBody TradeRequest tradeRequest) {
+        tradeService.sell(new TradeCommand(auth.getUserId(), tradeRequest.tradeOfferId()));
     }
 }
 
