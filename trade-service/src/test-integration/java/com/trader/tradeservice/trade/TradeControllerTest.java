@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -26,26 +27,31 @@ class TradeControllerTest extends IntegrationTest {
     @Autowired
     private AccountRepository accountRepository;
 
+//    @Test
+//    @Transactional
+//    void registerUserShouldCreateAccountForUser() throws Exception {
+//        int sizeBefore = accountRepository.findAll().size();
+//
+//        mockMvc.perform(post("/api/user")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content("{\n" +
+//                                "    \"email\":\"a@a.com\",\n" +
+//                                "    \"password\":\"password123\"\n" +
+//                                "}"))
+//                .andExpect(status().is(201));
+//
+//        assertThat(accountRepository.findAll().size()).isEqualTo(sizeBefore + 1);
+//    }
+
     @Test
-    @Transactional
-    void registerUserShouldCreateAccountForUser() throws Exception {
-        int sizeBefore = accountRepository.findAll().size();
-
-        mockMvc.perform(post("/api/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "    \"email\":\"a@a.com\",\n" +
-                                "    \"password\":\"password123\"\n" +
-                                "}"))
-                .andExpect(status().is(201));
-
-        assertThat(accountRepository.findAll().size()).isEqualTo(sizeBefore + 1);
-    }
-
-    @Test
-    @WithUserDetails(value = "test-user@test.com", userDetailsServiceBeanName = "userService")
     void getAccountInfoShouldReturnAccountInfoOfLoggedUser() throws Exception {
-        mockMvc.perform(get("/api/trade"))
+        mockMvc.perform(get("/api/trade").with(jwt().jwt(jwt -> jwt
+
+                                .claim("user_id", "b0f7d62e-e3c4-41ae-89b0-369b27c735e2").claim(
+                                        "authorities", "ROLE_REGULAR_USER"
+                                ))
+                        )
+                )
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.balance").value(10000.00))
                 .andExpect(jsonPath("$.assets.BTC").value(2.5))
@@ -78,7 +84,7 @@ class TradeControllerTest extends IntegrationTest {
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.assets.BTC").value(5));
 
-       mockMvc.perform(get("/api/trade-history?start=" + LocalDate.now() + "&end=" + LocalDate.now())
+        mockMvc.perform(get("/api/trade-history?start=" + LocalDate.now() + "&end=" + LocalDate.now())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(tradeOfferRequest)))
                 .andExpect(status().is(200))

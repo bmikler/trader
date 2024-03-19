@@ -1,7 +1,6 @@
 package com.trader.tradeservice.trade;
 
 import com.trader.tradeservice.shared.CryptoCurrency;
-import com.trader.tradeservice.user.RegisterUserEvent;
 import com.trader.tradeservice.rate.Rate;
 import com.trader.tradeservice.rate.RateService;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,12 +23,12 @@ class AccountService {
     private final AccountFactory accountFactory;
     private final RateService rateService;
 
-    @EventListener
-    public void createAccount(RegisterUserEvent event) {
-        Account account = accountFactory.createAccount(event.getUserId());
-        accountRepository.save(account);
-        log.info("Account for user with id {} has been created", event.getUserId());
-    }
+//    @EventListener
+//    public void createAccount(RegisterUserEvent event) {
+//        Account account = accountFactory.createAccount(event.getUserId());
+//        accountRepository.save(account);
+//        log.info("Account for user with id {} has been created", event.getUserId());
+//    }
 
     AccountInfoDto getAccountInfo(UUID userId) {
         Account account = accountRepository.getAccountByUserId(userId).orElseThrow(() -> new EntityNotFoundException("Account not found"));

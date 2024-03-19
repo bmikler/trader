@@ -1,12 +1,11 @@
 package com.trader.tradeservice.tradehistory;
 
+import com.trader.tradeservice.security.CustomJwtAuthenticationToken;
 import com.trader.tradeservice.shared.CryptoCurrency;
-import com.trader.tradeservice.user.SecurityUser;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,8 +25,8 @@ class TradeHistoryController {
     private final TradeHistoryService tradeHistoryService;
 
     @GetMapping
-    ResponseEntity<List<HistoryDto>> getTradeHistory(@AuthenticationPrincipal SecurityUser user, @RequestParam LocalDate start, @RequestParam LocalDate end) {
-        List<HistoryDto> history = tradeHistoryService.getTradeHistory(new HistoryQuery(user.getId(), start, end));
+    ResponseEntity<List<HistoryDto>> getTradeHistory(CustomJwtAuthenticationToken auth, @RequestParam LocalDate start, @RequestParam LocalDate end) {
+        List<HistoryDto> history = tradeHistoryService.getTradeHistory(new HistoryQuery(auth.getUserId(), start, end));
         return ResponseEntity.ok().body(history);
     }
 }
