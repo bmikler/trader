@@ -1,5 +1,6 @@
 package com.trader.tradeservice.trade;
 
+import com.trader.tradeservice.security.CustomJwtAuthenticationToken;
 import com.trader.tradeservice.shared.CryptoCurrency;
 import com.trader.tradeservice.user.SecurityUser;
 import jakarta.validation.constraints.DecimalMin;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -22,9 +24,12 @@ class TradeController {
     private final AccountService accountService;
 
     @GetMapping("/test")
-    ResponseEntity<?> test(Authentication authentication) {
-        System.err.println(authentication.getAuthorities());
-        return ResponseEntity.ok(authentication);
+    ResponseEntity<?> test(CustomJwtAuthenticationToken auth) {
+//        Object userId = auth.getToken().getClaim("user_id");
+        System.err.println("id: " + auth.getUserId());
+//        Object userEmail = auth.getToken().getClaim("user_email");
+        System.err.println("email: " + auth.getUserEmail());
+        return ResponseEntity.ok(auth.getUserId());
     }
 
     @GetMapping
