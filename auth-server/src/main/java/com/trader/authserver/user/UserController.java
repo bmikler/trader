@@ -1,4 +1,4 @@
-package com.trader.tradeservice.user;
+package com.trader.authserver.user;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -22,8 +22,7 @@ class UserController {
     private final UserService userService;
 
     @PostMapping
-    ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest registerRequest) {
-        System.err.println("abc");
+    ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         RegisterResponse response = userService.createUser(registerRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

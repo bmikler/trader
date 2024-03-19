@@ -8,8 +8,11 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,6 +49,9 @@ import java.util.UUID;
 @Configuration
 class SecurityConfig {
 
+    // http://localhost:8080/oauth2/authorize?response_type=code&client_id=client&scope=openid&redirect_uri=https://springone.io/authorized&code_challenge=QYPAZ5NU8yvtlQ9erXrUYR-T5AGCjCF47vN-KsaI2A8&code_challenge_method=S256
+    // http://localhost:8080/oauth2/token?client_id=client&redirect_uri=https://springone.io/authorized&grant_type=authorization_code&code=dWlJMGpGlUAPz0sRU1y8suXDyWejo0_B4-WrLP-ks5kSlcdvlGG-u1OxOORvvpm7IMJaC_lMqzTX2Oh6AKHGOb2J4-Hp6PVPvGjLeUQMnWzz6h3Xyy1D0S6czbiTeU8f&code_verifier=qPsH306-ZDDaOE8DFzVn05TkN3ZZoVmI_6x4LsVglQI
+
     @Bean
     @Order(1)
     SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -65,39 +71,19 @@ class SecurityConfig {
     SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .formLogin(Customizer.withDefaults())
-                .authorizeHttpRequests(httpRequest -> httpRequest.anyRequest().authenticated())
+                .authorizeHttpRequests(httpRequest ->
+                        httpRequest
+                                .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                                .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable) //TODO remove it
+                .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //TODO remove it
                 .build();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5);
-        UserDetails userDetails = User.withUsername("user").password("password").authorities("ROLE_REGULAR_USER").build();
-        return new InMemoryUserDetailsManager(userDetails);
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-
-    @Bean
-    RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient registeredClient = RegisteredClient
-                .withId(UUID.randomUUID().toString())
-                .clientId("client")
-                .clientSecret("secret")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .scope(OidcScopes.OPENID)
-                .scope(OidcScopes.PROFILE)
-                .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofDays(10)).build()) //TODO remove it!
-                .redirectUri("https://springone.io/authorized")
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .build();
-
-        return new InMemoryRegisteredClientRepository(registeredClient);
+        return new BCryptPasswordEncoder(5);
     }
 
     @Bean

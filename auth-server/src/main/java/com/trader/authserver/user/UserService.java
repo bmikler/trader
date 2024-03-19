@@ -1,9 +1,10 @@
-package com.trader.tradeservice.user;
+package com.trader.authserver.user;
 
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,10 +29,7 @@ class UserService implements UserDetailsService {
 
     @Transactional
     RegisterResponse createUser(RegisterRequest registerRequest) {
-
-        String hash = passwordEncoder.encode(registerRequest.password());
-        System.err.println(hash);
-        AppUser appUser = new AppUser(registerRequest.email(), hash, UserRole.ROLE_REGULAR_USER);
+        AppUser appUser = new AppUser(registerRequest.email(), passwordEncoder.encode(registerRequest.password()), UserRole.ROLE_REGULAR_USER);
         AppUser appUserSaved = userRepository.save(appUser);
         log.info("User with email {} has been registered with id {}", appUserSaved.getEmail(), appUserSaved.getId());
 //        eventPublisher.publishEvent(new RegisterUserEvent(this, appUserSaved.getId()));
