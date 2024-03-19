@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.trader.authserver.user.SecurityUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,6 +14,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,7 +66,6 @@ class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     @Order(2)
@@ -120,7 +121,13 @@ class SecurityConfig {
             List<String> authorities = context.getPrincipal().getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .toList();
+
             context.getClaims().claim("authorities", authorities);
+
+            SecurityUser user = (SecurityUser) context.getPrincipal().getPrincipal();
+
+            context.getClaims().claim("user_id", user.getId());
+            context.getClaims().claim("user_email", user.getUsername());
         };
     }
 }
