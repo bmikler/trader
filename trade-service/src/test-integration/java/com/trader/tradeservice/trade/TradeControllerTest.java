@@ -46,7 +46,6 @@ class TradeControllerTest extends IntegrationTest {
     @Test
     void getAccountInfoShouldReturnAccountInfoOfLoggedUser() throws Exception {
         mockMvc.perform(get("/api/trade").with(jwt().jwt(jwt -> jwt
-
                                 .claim("user_id", "b0f7d62e-e3c4-41ae-89b0-369b27c735e2").claim(
                                         "authorities", "ROLE_REGULAR_USER"
                                 ))

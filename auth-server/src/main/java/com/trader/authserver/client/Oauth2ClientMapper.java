@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -23,8 +24,10 @@ class Oauth2ClientMapper {
                 .clientSecret(client.getSecret())
                 .scope(client.getScope())
                 .redirectUri(client.getRedirectUri())
+                .redirectUri("http://localhost:8088/login/oauth2/code/gateway")
                 .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthMethod()))
-                .authorizationGrantType(new AuthorizationGrantType(client.getGrantType()))
+//                .authorizationGrantType(new AuthorizationGrantType(client.getGrantType()))
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofDays(1))
                         .build())
