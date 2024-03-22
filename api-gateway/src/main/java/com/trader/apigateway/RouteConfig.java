@@ -15,7 +15,7 @@ class RouteConfig {
                         .uri("lb://RATE-SERVICE"))
                 .route("trade-service", r -> r.path("/trade/**")
                         .filters(f -> f.stripPrefix(1).tokenRelay())
-                        .uri("lb://TRADE-SERVICE"))
+                        .uri("http://backend-resources:8082/api/trade"))
                 .build();
     }
 }
