@@ -10,12 +10,12 @@ class RouteConfig {
     @Bean
     RouteLocator myRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("rate-service", r -> r.path("/rate/**")
+                .route("rate-service", r -> r.path("/rate-service/**")
                         .filters(f -> f.stripPrefix(1).tokenRelay())
                         .uri("lb://RATE-SERVICE"))
-                .route("trade-service", r -> r.path("/trade/**")
+                .route("trade-service", r -> r.path("/trade-service/**")
                         .filters(f -> f.stripPrefix(1).tokenRelay())
-                        .uri("http://backend-resources:8082/api/trade"))
+                        .uri("lb://TRADE-SERVICE"))
                 .build();
     }
 }

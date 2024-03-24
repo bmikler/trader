@@ -32,6 +32,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
@@ -90,6 +91,22 @@ class SecurityConfig {
     @Bean
     AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
+    }
+
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        RegisteredClient apiGatewayClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("gateway-client-id")
+                .clientSecret("$2a$05$ufo6HjX/Fr7JKB0viTLjHONnHMzt1VzifcqfDs5NdMjDFBkdfIWk.")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .redirectUri("http://backend-gateway-client:8088/login/oauth2/code/gateway")
+                .redirectUri("http://backend-gateway-client:8088/authorized")
+                .scope(OidcScopes.OPENID)
+                .build();
+
+        return new InMemoryRegisteredClientRepository(apiGatewayClient);
     }
 
     @Bean
