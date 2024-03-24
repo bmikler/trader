@@ -63,7 +63,8 @@ class SecurityConfig {
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
 
-        http.exceptionHandling(e -> e.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")));
+        http.exceptionHandling(e ->
+                e.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")));
 
         return http.build();
     }
@@ -75,11 +76,9 @@ class SecurityConfig {
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(httpRequest ->
                         httpRequest
-                                .requestMatchers("/h2-console/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                                .requestMatchers("/api/user").permitAll()
                                 .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable) //TODO remove it
-                .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) //TODO remove it
                 .build();
     }
 
