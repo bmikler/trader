@@ -11,7 +11,7 @@ class RouteConfig {
     RouteLocator myRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("backend-auth", r -> r.path("/backend-auth/**")
-                        .filters(f -> f.stripPrefix(1))
+                        .filters(f -> f.stripPrefix(1).tokenRelay())
                         .uri("lb://BACKEND-AUTH"))
                 .route("rate-service", r -> r.path("/rate-service/**")
                         .filters(f -> f.stripPrefix(1).tokenRelay())
