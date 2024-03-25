@@ -21,6 +21,7 @@ class SecurityConfig {
                         exchanges
                                 .pathMatchers("/backend-auth/**").permitAll()
                                 .anyExchange().authenticated())
+                .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 }
