@@ -1,5 +1,6 @@
 package com.trader.tradeservice.trade;
 
+import com.trader.tradeservice.infrastructure.RegisterUserEvent;
 import com.trader.tradeservice.shared.CryptoCurrency;
 import com.trader.tradeservice.rate.Rate;
 import com.trader.tradeservice.rate.RateService;
@@ -23,12 +24,13 @@ class AccountService {
     private final AccountFactory accountFactory;
     private final RateService rateService;
 
-//    @EventListener
-//    public void createAccount(RegisterUserEvent event) {
-//        Account account = accountFactory.createAccount(event.getUserId());
-//        accountRepository.save(account);
-//        log.info("Account for user with id {} has been created", event.getUserId());
-//    }
+
+    @EventListener
+    public void createAccount(RegisterUserEvent event) {
+        Account account = accountFactory.createAccount(event.id());
+        accountRepository.save(account);
+        log.info("Account for user with id {} has been created", event.id());
+    }
 
     AccountInfoDto getAccountInfo(UUID userId) {
         Account account = accountRepository.getAccountByUserId(userId).orElseThrow(() -> new EntityNotFoundException("Account not found"));

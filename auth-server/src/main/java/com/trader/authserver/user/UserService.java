@@ -5,11 +5,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 
 @Slf4j
@@ -19,6 +22,7 @@ class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,9 +36,15 @@ class UserService implements UserDetailsService {
         AppUser appUser = new AppUser(registerRequest.email(), passwordEncoder.encode(registerRequest.password()), UserRole.ROLE_REGULAR_USER);
         AppUser appUserSaved = userRepository.save(appUser);
         log.info("User with email {} has been registered with id {}", appUserSaved.getEmail(), appUserSaved.getId());
-//        eventPublisher.publishEvent(new RegisterUserEvent(this, appUserSaved.getId()));
-        //TODO send event to kaffka
+
+        //TODO send event to kaffka\
+
+        kafkaTemplate.send("user-created", "Test");
         return new RegisterResponse(appUserSaved.getId(), appUserSaved.getEmail());
     }
+}
+
+record UserCreatedDto(UUID id, String email) {
+
 }
 

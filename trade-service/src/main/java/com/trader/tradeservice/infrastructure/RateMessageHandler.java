@@ -1,7 +1,9 @@
-package com.trader.tradeservice.rate;
+package com.trader.tradeservice.infrastructure;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.trader.tradeservice.rate.Rate;
+import com.trader.tradeservice.rate.RateRepository;
 import com.trader.tradeservice.shared.CryptoCurrency;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
