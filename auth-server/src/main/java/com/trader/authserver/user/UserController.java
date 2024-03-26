@@ -18,11 +18,6 @@ class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    ResponseEntity<String> test() {
-        return ResponseEntity.ok("test");
-    }
-
     @PostMapping
     ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         RegisterResponse response = userService.createUser(registerRequest);

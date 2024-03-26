@@ -6,7 +6,6 @@ import com.trader.tradeservice.rate.RateService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -22,7 +21,6 @@ class AccountService {
     private final AccountRepository accountRepository;
     private final AccountFactory accountFactory;
     private final RateService rateService;
-
 
     void createAccount(RegisterUserEvent event) {
         Account account = accountFactory.createAccount(event.id());
