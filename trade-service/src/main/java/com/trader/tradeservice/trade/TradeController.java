@@ -2,6 +2,7 @@ package com.trader.tradeservice.trade;
 
 import com.trader.tradeservice.security.CustomJwtAuthenticationToken;
 import com.trader.tradeservice.shared.CryptoCurrency;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ class TradeController {
     }
 
     @PostMapping
-    ResponseEntity<TradeOffer> createOffer(CustomJwtAuthenticationToken auth, @RequestBody TradeOfferRequest tradeOfferRequest) {
+    ResponseEntity<TradeOffer> createOffer(CustomJwtAuthenticationToken auth, @Valid @RequestBody TradeOfferRequest tradeOfferRequest) {
         TradeOffer tradeOffer = tradeService.createOffer(new TradeOfferCommand(auth.getUserId(), tradeOfferRequest.currency(), tradeOfferRequest.amount()));
         return new ResponseEntity<>(tradeOffer, HttpStatus.CREATED);
     }
@@ -41,7 +42,7 @@ class TradeController {
     }
 }
 
-record TradeOfferRequest(CryptoCurrency currency, @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount) {}
+record TradeOfferRequest(CryptoCurrency currency, @DecimalMin(value = "0.000001") BigDecimal amount) {}
 record TradeRequest(UUID tradeOfferId) {}
 
 
