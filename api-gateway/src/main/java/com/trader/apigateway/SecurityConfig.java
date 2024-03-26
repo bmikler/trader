@@ -3,6 +3,7 @@ package com.trader.apigateway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,9 +20,10 @@ class SecurityConfig {
         return http
                 .authorizeExchange(exchanges ->
                         exchanges
-                                .pathMatchers("/backend-auth/**").permitAll()
+                                .pathMatchers(HttpMethod.POST, "/backend-auth/**").permitAll()
                                 .anyExchange().authenticated())
                 .oauth2Login(Customizer.withDefaults())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable) //TODO fix it
                 .build();
     }
 }

@@ -19,15 +19,6 @@ class TradeController {
     private final TradeService tradeService;
     private final AccountService accountService;
 
-    @GetMapping("/test")
-    ResponseEntity<?> test(CustomJwtAuthenticationToken auth) {
-//        Object userId = auth.getToken().getClaim("user_id");
-        System.err.println("id: " + auth.getUserId());
-//        Object userEmail = auth.getToken().getClaim("user_email");
-        System.err.println("email: " + auth.getUserEmail());
-        return ResponseEntity.ok(auth.getUserId());
-    }
-
     @GetMapping
     ResponseEntity<AccountInfoDto> getAccountInfo(CustomJwtAuthenticationToken auth) {
         return ResponseEntity.ok(accountService.getAccountInfo(auth.getUserId()));

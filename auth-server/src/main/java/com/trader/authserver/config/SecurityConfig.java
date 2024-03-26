@@ -74,11 +74,11 @@ class SecurityConfig {
     @Order(2)
     SecurityFilterChain appSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(httpRequest ->
                         httpRequest
-                                .requestMatchers("/api/user").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/user").permitAll()
                                 .anyRequest().authenticated())
+                .formLogin(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable) //TODO remove it
                 .build();
     }

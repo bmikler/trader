@@ -1,6 +1,7 @@
 package com.trader.authserver.config;
 
-import com.nimbusds.jose.shaded.gson.JsonSerializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+import com.trader.authserver.user.UserCreatedEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -31,7 +32,7 @@ class KafkaConfig {
     }
 
     @Bean
-    ProducerFactory<String, Object> producerFactory() {
+    ProducerFactory<String, UserCreatedEvent> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -40,7 +41,7 @@ class KafkaConfig {
     }
 
     @Bean
-    KafkaTemplate<String, Object> kafkaTemplate() {
+    KafkaTemplate<String, UserCreatedEvent> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
