@@ -24,8 +24,7 @@ class AccountService {
     private final RateService rateService;
 
 
-    @EventListener
-    public void createAccount(RegisterUserEvent event) {
+    void createAccount(RegisterUserEvent event) {
         Account account = accountFactory.createAccount(event.id());
         accountRepository.save(account);
         log.info("Account for user with id {} has been created", event.id());
