@@ -22,6 +22,10 @@ val integrationTest = testSets.create("integrationTest") {
 	dirName = "test-integration"
 }
 
+val kafkaIntegrationTest = testSets.create("kafkaIntegrationTest") {
+	dirName = "test-integration-kafka"
+}
+
 tasks.withType(Test::class.java) {
 	useJUnitPlatform()
 }

@@ -1,7 +1,4 @@
 spring:
-  sql:
-    init:
-      mode: always
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
@@ -17,4 +14,4 @@ spring:
     test:
       topic: user-created
 
-offer-expiration-minutes: 1
+starting-balance: 10000

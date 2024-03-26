@@ -21,10 +21,9 @@ class UserCreatedMessageHandler {
 
     @KafkaListener(id = "user", topics = "user-created")
     void handleKafkaMessage(String in) throws JsonProcessingException {
-        log.info("Recieved Kaffka event {}", in);
+        log.info("Received kafka event {}", in);
         RegisterUserEvent registerUserEvent = mapper.readValue(in, RegisterUserEvent.class);
         accountService.createAccount(registerUserEvent);
     }
-
 }
 
