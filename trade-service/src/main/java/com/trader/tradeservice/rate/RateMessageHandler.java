@@ -1,4 +1,4 @@
-package com.trader.tradeservice.infrastructure;
+package com.trader.tradeservice.rate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

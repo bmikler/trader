@@ -1,6 +1,5 @@
 package com.trader.tradeservice.trade;
 
-import com.trader.tradeservice.infrastructure.RegisterUserEvent;
 import com.trader.tradeservice.shared.CryptoCurrency;
 import com.trader.tradeservice.rate.Rate;
 import com.trader.tradeservice.rate.RateService;
@@ -38,5 +37,7 @@ class AccountService {
         return new AccountInfoDto(account.getMoney(), account.getAssets(), account.getTotal(rates));
     }
 }
+
+record RegisterUserEvent(UUID id) {};
 
 record AccountInfoDto(BigDecimal balance, Map<CryptoCurrency, BigDecimal> assets, BigDecimal total) {};
