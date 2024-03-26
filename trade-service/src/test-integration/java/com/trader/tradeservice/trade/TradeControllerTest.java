@@ -24,24 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class TradeControllerTest extends IntegrationTest {
 
-    @Autowired
-    private AccountRepository accountRepository;
-
-//    @Test
-//    @Transactional
-//    void registerUserShouldCreateAccountForUser() throws Exception {
-//        int sizeBefore = accountRepository.findAll().size();
-//
-//        mockMvc.perform(post("/api/user")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("{\n" +
-//                                "    \"email\":\"a@a.com\",\n" +
-//                                "    \"password\":\"password123\"\n" +
-//                                "}"))
-//                .andExpect(status().is(201));
-//
-//        assertThat(accountRepository.findAll().size()).isEqualTo(sizeBefore + 1);
-//    }
+    //TODO create offer
+    //TODO create offer incorect request, amount out of range, not known symbol
 
     @Test
     void getAccountInfoShouldReturnAccountInfoOfLoggedUser() throws Exception {
